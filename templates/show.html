@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container d-flex flex-column align-items-center ">
+        <h1 class="mb-5">Welcome to the Great Number Game!</h1>
+        <h3>I am thinking of a number between 1 and 100</h3>
+        <h3 class="mb-5">Take a guess</h3>
+        {% if session['guess'] == session['great_num']:%}
+            <div style="height: 300px;" class="d-flex border border-dark border-3 mb-5 justify-content-center align-items-center w-50 bg-success text-white">
+        {% else: %}
+            <div style="height: 300px;" class="d-flex border border-dark border-3 mb-5 justify-content-center align-items-center w-50 bg-danger text-white">
+        {% endif %}
+            {% if session['attempts'] >=  5 and session['guess'] != session['great_num'] %}
+                <form class="container d-flex flex-column align-items-center" action="/" method="GET">
+                    <h1 class="mb-3 text-bold">YOU LOSE</h1>
+                    <h1 class="mb-3">Reached Max Attempts</h1>
+                    <h1 class="mb-5">{{session['great_num']}} Was The Great Number</h1>
+                    <button class="btn btn-primary" type="submit">Play again!</button>
+                </form>
+            {% elif session['guess'] < session['great_num']: %}
+                <form class="container d-flex flex-column align-items-center" action="/guess" method="POST">
+                    <h1 class="mb-5" >{{session['guess']}} is Too low!</h1>
+                    <input type="text" name="guess" id="guess">
+                    <button class="btn btn-primary mt-1" type="submit">Submit</button>
+                </form>
+            {%  elif session['guess'] > session['great_num']:  %}
+                <form class="container d-flex flex-column align-items-center" action="/guess" method="POST">
+                    <h1 class="mb-5">{{session['guess']}} is Too High!</h1>
+                    <input type="text" name="guess" id="guess">
+                    <button class="btn btn-primary mt-1" type="submit">Submit</button>
+                </form>
+            
+            {% else: %}
+                <form class="container d-flex flex-column align-items-center" action="/" method="GET">
+                    <h1 class="mb-3">{{session['guess']}} is Correct!</h1>
+                    <h1 class="mb-5">Attempts: {{session['attempts']}}</h1>
+                    <button class="btn btn-primary" type="submit">Play again!</button>
+                </form>
+                <form class="container d-flex flex-column align-items-center" action="/leaderboard" method="POST">
+                    <h5>Enter Your Name to Join The Leaderboard</h5>
+                    <input type="text" name="name" id="name">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
